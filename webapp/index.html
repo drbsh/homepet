@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой Питомец</title>
+    <!-- Подключаем официальный скрипт Telegram Web App -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        /* Базовые стили, адаптирующиеся под тему Telegram (темная/светлая) */
+        body {
+            background-color: var(--tg-theme-bg-color, #fff);
+            color: var(--tg-theme-text-color, #000);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .pet-container {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .pet-emoji {
+            font-size: 100px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .pet-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .stats {
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 30px;
+        }
+
+        .stat-bar {
+            background-color: var(--tg-theme-secondary-bg-color, #f0f0f0);
+            border-radius: 10px;
+            height: 20px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .stat-fill {
+            height: 100%;
+            background-color: #4CAF50; /* Зеленый цвет */
+            width: 100%; /* Будем менять через JS */
+            transition: width 0.5s ease;
+        }
+
+        .stat-label {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            top: 0;
+            line-height: 20px;
+            font-size: 12px;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            background-color: var(--tg-theme-button-color, #3390ec);
+            color: var(--tg-theme-button-text-color, #fff);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="pet-container">
+        <div class="pet-emoji">🐉</div>
+        <div class="pet-name">Дракоша</div>
+    </div>
+
+    <div class="stats">
+        <div class="stat-bar">
+            <div class="stat-fill" id="hunger-bar" style="width: 80%;"></div>
+            <div class="stat-label">Сытость: 80%</div>
+        </div>
+        <div class="stat-bar">
+            <div class="stat-fill" id="happy-bar" style="width: 90%; background-color: #FFC107;"></div>
+            <div class="stat-label">Счастье: 90%</div>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button class="btn" onclick="sendAction('feed')">🍖 Покормить</button>
+        <button class="btn" onclick="sendAction('play')">🎾 Поиграть</button>
+    </div>
+
+    <script>
+        // Инициализация Telegram Web App
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Разворачиваем на весь экран
+
+        // Функция отправки данных боту
+        function sendAction(action) {
+            // Вибрация для тактильного отклика (работает на телефоне)
+            tg.HapticFeedback.impactOccurred('light');
+
+            // Отправляем данные боту в формате JSON
+            const data = JSON.stringify({
+                action: action,
+                timestamp: Date.now()
+            });
+            
+            tg.sendData(data);
+        }
+    </script>
+</body>
+</html>
